@@ -5,8 +5,8 @@ const MONGODB_URI =
 
 declare global {
   var mongoose: {
-    conn: typeof mongoose | null;
-    promise: Promise<typeof mongoose> | null;
+    conn: typeof import("mongoose") | null;
+    promise: Promise<typeof import("mongoose")> | null;
   };
 }
 
@@ -26,9 +26,7 @@ async function connectDB() {
       bufferCommands: false,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
-      return mongoose;
-    });
+    cached.promise = mongoose.connect(MONGODB_URI, opts);
   }
 
   try {

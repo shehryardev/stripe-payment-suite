@@ -28,14 +28,14 @@ export async function POST(request: NextRequest) {
     }
 
     const currentDate = new Date();
-    const currentPlanEndDate = new Date(user.currentPlan.endDate);
+    const currentPlanEndDate = new Date(user.currentPlan.endDate || new Date());
     const daysRemaining = Math.ceil(
       (currentPlanEndDate.getTime() - currentDate.getTime()) /
         (1000 * 60 * 60 * 24)
     );
 
     // Calculate prorated amount for current plan
-    const currentPlanDailyRate = user.currentPlan.price / 30; // Assuming 30 days per month
+    const currentPlanDailyRate = (user.currentPlan.price || 0) / 30; // Assuming 30 days per month
     const currentPlanRemainingValue = currentPlanDailyRate * daysRemaining;
 
     // Calculate new plan daily rate

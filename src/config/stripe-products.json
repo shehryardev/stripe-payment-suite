@@ -1,0 +1,39 @@
+[
+  {
+    "id": "prod_T0q4dwoJYxw2xV",
+    "name": "Basic Plan",
+    "description": "Perfect for individuals and small projects",
+    "price": 999,
+    "priceId": "price_1S4oNyA4uuuKTe2IHvRzSLpp",
+    "interval": "month",
+    "features": ["Up to 1,000 transactions", "Basic analytics", "Email support"]
+  },
+  {
+    "id": "prod_T0q4bwEv3Di7WQ",
+    "name": "Pro Plan",
+    "description": "Ideal for growing businesses",
+    "price": 2999,
+    "priceId": "price_1S4oNzA4uuuKTe2IXvu3dzcY",
+    "interval": "month",
+    "features": [
+      "Up to 10,000 transactions",
+      "Advanced analytics",
+      "Priority support",
+      "API access"
+    ]
+  },
+  {
+    "id": "prod_T0q4WwYvJfNDCP",
+    "name": "Enterprise Plan",
+    "description": "For large-scale operations",
+    "price": 9999,
+    "priceId": "price_1S4oO0A4uuuKTe2I2oRjvtPl",
+    "interval": "month",
+    "features": [
+      "Unlimited transactions",
+      "Custom analytics",
+      "24/7 support",
+      "Custom integrations"
+    ]
+  }
+]

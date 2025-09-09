@@ -66,8 +66,13 @@ export default function PaymentPage() {
     }
   };
 
-  const handleSignOut = () => {
-    signOut();
+  const handleSignOut = async () => {
+    try {
+      await signOut({ redirectUrl: "/" });
+    } catch (error) {
+      console.error("Error signing out:", error);
+      toast.error("Failed to sign out. Please try again.");
+    }
   };
 
   const handleCancelSubscription = async () => {
@@ -235,16 +240,19 @@ export default function PaymentPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       {/* Header */}
-      <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-b border-slate-200 dark:border-slate-700">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-4">
-              <User className="w-6 h-6 text-slate-600 dark:text-slate-300" />
-              <div>
-                <p className="font-semibold text-slate-900 dark:text-white">
-                  {user?.firstName} {user?.lastName}
+      <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-b border-slate-200 dark:border-slate-700 sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+            <div className="flex items-center space-x-3 sm:space-x-4">
+              <User className="w-6 h-6 text-slate-600 dark:text-slate-300 flex-shrink-0" />
+              <div className="min-w-0 flex-1">
+                <p className="font-semibold text-slate-900 dark:text-white truncate">
+                  Welcome back, {user?.firstName} {user?.lastName}!
                 </p>
-                <p className="text-sm text-slate-600 dark:text-slate-300">
+                <p className="text-sm text-slate-600 dark:text-slate-300 truncate">
+                  Here's what's happening with your payments today.
+                </p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
                   {user?.primaryEmailAddress?.emailAddress}
                 </p>
               </div>
@@ -252,30 +260,30 @@ export default function PaymentPage() {
             <Button
               onClick={handleSignOut}
               variant="outline"
-              className="flex items-center space-x-2"
+              className="flex items-center space-x-2 self-start sm:self-auto"
             >
               <LogOut className="w-4 h-4" />
-              <span>Sign Out</span>
+              <span className="hidden sm:inline">Sign Out</span>
             </Button>
           </div>
         </div>
       </div>
 
-      <div className="py-12">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="py-6 sm:py-8 lg:py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-12"
+            className="text-center mb-8 sm:mb-12"
           >
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200 text-sm font-medium mb-6">
+            <div className="inline-flex items-center px-3 sm:px-4 py-2 rounded-full bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200 text-xs sm:text-sm font-medium mb-4 sm:mb-6">
               ✅ Real Stripe Integration - Ready for Payments
             </div>
-            <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white mb-3 sm:mb-4">
               Choose Your Plan
             </h1>
-            <p className="text-xl text-slate-600 dark:text-slate-300">
+            <p className="text-base sm:text-lg lg:text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
               Select the perfect plan for your needs and start processing
               payments today
             </p>
@@ -289,17 +297,17 @@ export default function PaymentPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
-                className="mb-8"
+                className="mb-6 sm:mb-8"
               >
                 <Card className="border-0 shadow-lg bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">
-                  <CardHeader>
-                    <div className="flex justify-between items-start">
+                  <CardHeader className="pb-4">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
                       <div>
-                        <CardTitle className="flex items-center">
-                          <CheckCircle className="w-5 h-5 mr-2 text-green-500" />
+                        <CardTitle className="flex items-center text-lg sm:text-xl">
+                          <CheckCircle className="w-5 h-5 mr-2 text-green-500 flex-shrink-0" />
                           Current Plan
                         </CardTitle>
-                        <CardDescription>
+                        <CardDescription className="mt-1">
                           Your active subscription details
                         </CardDescription>
                       </div>
@@ -307,7 +315,7 @@ export default function PaymentPage() {
                         <button
                           onClick={handleCancelSubscription}
                           disabled={isCancelling}
-                          className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors duration-200 hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors duration-200 hover:underline disabled:opacity-50 disabled:cursor-not-allowed self-start sm:self-auto"
                         >
                           {isCancelling ? (
                             <div className="flex items-center">
@@ -321,13 +329,13 @@ export default function PaymentPage() {
                       )}
                     </div>
                   </CardHeader>
-                  <CardContent>
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <h3 className="text-xl font-semibold text-slate-900 dark:text-white">
+                  <CardContent className="pt-0">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+                      <div className="space-y-1">
+                        <h3 className="text-lg sm:text-xl font-semibold text-slate-900 dark:text-white">
                           {userPlan.currentPlan.planName}
                         </h3>
-                        <p className="text-slate-600 dark:text-slate-300">
+                        <p className="text-slate-600 dark:text-slate-300 font-medium">
                           $
                           {((userPlan.currentPlan.price || 0) / 100).toFixed(2)}
                           /month
@@ -341,7 +349,7 @@ export default function PaymentPage() {
                           </p>
                         )}
                       </div>
-                      <div className="text-right">
+                      <div className="flex flex-col items-start sm:items-end gap-2">
                         <Badge
                           variant="outline"
                           className={`${
@@ -355,7 +363,7 @@ export default function PaymentPage() {
                           {userPlan.currentPlan.status || "expired"}
                         </Badge>
                         {userPlan.credits > 0 && (
-                          <p className="text-sm text-blue-600 mt-2">
+                          <p className="text-sm text-blue-600 font-medium">
                             Credits: ${(userPlan.credits / 100).toFixed(2)}
                           </p>
                         )}
@@ -366,24 +374,25 @@ export default function PaymentPage() {
               </motion.div>
             )}
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid lg:grid-cols-2 gap-6 lg:gap-8">
             {/* Product Selection */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
+              className="order-2 lg:order-1"
             >
-              <Card className="border-0 shadow-lg bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <DollarSign className="w-5 h-5 mr-2" />
+              <Card className="border-0 shadow-lg bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm h-fit">
+                <CardHeader className="pb-4">
+                  <CardTitle className="flex items-center text-lg sm:text-xl">
+                    <DollarSign className="w-5 h-5 mr-2 flex-shrink-0" />
                     Select Plan
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="text-sm sm:text-base">
                     Choose the plan that best fits your business needs
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-3 sm:space-y-4">
                   {products.map((product) => (
                     <motion.div
                       key={product.id}
@@ -403,34 +412,34 @@ export default function PaymentPage() {
                         onClick={() => setSelectedProduct(product)}
                       >
                         <CardHeader className="pb-3">
-                          <div className="flex justify-between items-start">
-                            <div>
-                              <CardTitle className="text-lg">
+                          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3">
+                            <div className="flex-1">
+                              <CardTitle className="text-base sm:text-lg">
                                 {product.name}
                               </CardTitle>
-                              <CardDescription>
+                              <CardDescription className="text-sm mt-1">
                                 {product.description}
                               </CardDescription>
                             </div>
-                            <div className="text-right">
-                              <div className="text-2xl font-bold text-slate-900 dark:text-white">
-                                ${product.price}
+                            <div className="text-left sm:text-right">
+                              <div className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+                                ${(product.price / 100).toFixed(2)}
                               </div>
-                              <div className="text-sm text-slate-600 dark:text-slate-300">
+                              <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-300">
                                 per month
                               </div>
                             </div>
                           </div>
                         </CardHeader>
-                        <CardContent>
+                        <CardContent className="pt-0">
                           <ul className="space-y-2">
                             {product.features.map((feature, index) => (
                               <li
                                 key={index}
-                                className="flex items-center text-sm"
+                                className="flex items-start text-xs sm:text-sm"
                               >
-                                <CheckCircle className="w-4 h-4 text-green-500 mr-2 flex-shrink-0" />
-                                {feature}
+                                <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
+                                <span className="leading-tight">{feature}</span>
                               </li>
                             ))}
                           </ul>
@@ -447,18 +456,19 @@ export default function PaymentPage() {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
+              className="order-1 lg:order-2"
             >
-              <Card className="border-0 shadow-lg bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <CreditCard className="w-5 h-5 mr-2" />
+              <Card className="border-0 shadow-lg bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm sticky top-24">
+                <CardHeader className="pb-4">
+                  <CardTitle className="flex items-center text-lg sm:text-xl">
+                    <CreditCard className="w-5 h-5 mr-2 flex-shrink-0" />
                     Payment Details
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="text-sm sm:text-base">
                     Complete your purchase securely with Stripe
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-6">
+                <CardContent className="space-y-4 sm:space-y-6">
                   {/* Payment Method Selection */}
                   <div className="space-y-2">
                     <Label>Payment Method</Label>
@@ -480,26 +490,28 @@ export default function PaymentPage() {
                   </div>
 
                   {/* Selected Plan Summary */}
-                  <div className="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-4">
-                    <h3 className="font-semibold text-slate-900 dark:text-white mb-2">
+                  <div className="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-3 sm:p-4">
+                    <h3 className="font-semibold text-slate-900 dark:text-white mb-3 text-sm sm:text-base">
                       Order Summary
                     </h3>
-                    <div className="flex justify-between items-center">
-                      <span className="text-slate-600 dark:text-slate-300">
-                        {selectedProduct.name}
-                      </span>
-                      <span className="font-semibold text-slate-900 dark:text-white">
-                        ${(selectedProduct.price / 100).toFixed(2)}/month
-                      </span>
-                    </div>
-                    <div className="border-t border-slate-200 dark:border-slate-600 mt-2 pt-2">
-                      <div className="flex justify-between items-center font-semibold">
-                        <span className="text-slate-900 dark:text-white">
-                          Total
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-slate-600 dark:text-slate-300 text-sm">
+                          {selectedProduct.name}
                         </span>
-                        <span className="text-slate-900 dark:text-white">
+                        <span className="font-semibold text-slate-900 dark:text-white text-sm">
                           ${(selectedProduct.price / 100).toFixed(2)}/month
                         </span>
+                      </div>
+                      <div className="border-t border-slate-200 dark:border-slate-600 pt-2">
+                        <div className="flex justify-between items-center font-semibold">
+                          <span className="text-slate-900 dark:text-white text-sm sm:text-base">
+                            Total
+                          </span>
+                          <span className="text-slate-900 dark:text-white text-base sm:text-lg">
+                            ${(selectedProduct.price / 100).toFixed(2)}/month
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -516,11 +528,11 @@ export default function PaymentPage() {
                     <Button
                       onClick={handlePayment}
                       disabled={isProcessing}
-                      className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg py-6"
+                      className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-base sm:text-lg py-4 sm:py-6 font-semibold"
                     >
                       {isProcessing ? (
-                        <div className="flex items-center">
-                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                        <div className="flex items-center justify-center">
+                          <div className="animate-spin rounded-full h-4 w-4 sm:h-5 sm:w-5 border-b-2 border-white mr-2"></div>
                           Processing...
                         </div>
                       ) : (
@@ -530,7 +542,7 @@ export default function PaymentPage() {
                   )}
 
                   <div className="text-center">
-                    <p className="text-sm text-slate-600 dark:text-slate-300">
+                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300">
                       🔒 Secured by Stripe • Cancel anytime
                     </p>
                   </div>
